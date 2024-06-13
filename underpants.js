@@ -46,8 +46,11 @@ _.identity = function (value) {
  */
 
 _.typeOf = function (value) {
+  // Check if the value is exactly null
   if (value === null) return "null";
+  // Check if the value is an array
   if (Array.isArray(value)) return "array";
+  // Return the type of the value using the typeof operator
   return typeof value;
 };
 
@@ -70,18 +73,23 @@ _.typeOf = function (value) {
  */
 
 _.first = function (arr, num) {
+  // Check if the input is not an array
   if (!Array.isArray(arr)) {
-    return [];
+    return []; // Return an empty array if the input is not an array
   }
+  // Check if 'num' is undefined or not a number
   if (num === undefined || typeof num !== "number") {
-    return arr[0];
+    return arr[0]; // Return the first element of the array
   }
+  // Check if 'num' is negative
   if (num < 0) {
-    return [];
+    return []; // Return an empty array if 'num' is negative
   }
+  // Check if 'num' is greater than the length of the array
   if (num > arr.length) {
-    return arr;
+    return arr; // Return the entire array if 'num' exceeds the array length
   }
+  // Return the first 'num' elements of the array
   return arr.slice(0, num);
 };
 
@@ -104,18 +112,23 @@ _.first = function (arr, num) {
  */
 
 _.last = function (arr, num) {
+  // Check if the input is not an array
   if (!Array.isArray(arr)) {
-    return [];
+    return []; // Return an empty array if the input is not an array
   }
+  // Check if num is undefined or not a number
   if (num === undefined || typeof num !== "number") {
-    return arr[arr.length - 1];
+    return arr[arr.length - 1]; // Return the last element of the array
   }
+  // Check if num is negative
   if (num < 0) {
-    return [];
+    return []; // Return an empty array if num is negative
   }
+  // Check if num is greater than or equal to the length of the array
   if (num >= arr.length) {
-    return arr;
+    return arr; // Return the whole array if num is greater than or equal to the length of the array
   }
+  // Return the last num elements of the array
   return arr.slice(-num);
 };
 
@@ -136,11 +149,15 @@ _.last = function (arr, num) {
  */
 
 _.indexOf = function (arr, value) {
+  // Iterate through each element in the array
   for (var i = 0; i < arr.length; i++) {
+    // Check if the current element matches the value
     if (arr[i] === value) {
+      // Return the index if a match is found
       return i;
     }
   }
+  // Return -1 if the value is not found in the array
   return -1;
 };
 
@@ -188,12 +205,17 @@ _.contains = function (arr, value) {
  */
 
 _.each = function (collection, func) {
+  // Check if the collection is an array
   if (Array.isArray(collection)) {
+    // Iterate through each element in the array
     for (let i = 0; i < collection.length; i++) {
+      // Apply the function to each element, passing the element, its index, and the array
       func(collection[i], i, collection);
     }
   } else {
+    // Iterate through each key in the object
     for (let key in collection) {
+      // Apply the function to each key's value, passing the value, the key, and the object
       func(collection[key], key, collection);
     }
   }
@@ -210,12 +232,17 @@ _.each = function (collection, func) {
  */
 
 _.unique = function (arr) {
+  // Initialize an empty array to hold unique values
   let result = [];
+  // Iterate through each element in the input array
   for (let i = 0; i < arr.length; i++) {
+    // Check if the element is not already in the result array
     if (_.indexOf(result, arr[i]) === -1) {
+      // Add the element to the result array if it's unique
       result.push(arr[i]);
     }
   }
+  // Return the array of unique values
   return result;
 };
 
@@ -266,13 +293,15 @@ _.filter = function (arr, func) {
  */
 
 _.reject = function (arr, func) {
-  var rejected = [];
+  var rejected = []; // Initialize an empty array to hold rejected elements
   _.each(arr, function (element, index, arr) {
+    // Use _.each to iterate over each element in the array
     if (!func(element, index, arr)) {
-      rejected.push(element);
+      // If the predicate function returns false for the element
+      rejected.push(element); // Add the element to the rejected array
     }
   });
-  return rejected;
+  return rejected; // Return the array of rejected elements
 };
 
 /** _.partition
@@ -295,16 +324,19 @@ _.reject = function (arr, func) {
 */
 
 _.partition = function (arr, func) {
-  let truthy = [];
-  let falsey = [];
+  let truthy = []; // Initialize an array to hold elements that pass the predicate
+  let falsey = []; // Initialize an array to hold elements that don't pass the predicate
   _.each(arr, function (element, key, arr) {
+    // Use _.each to iterate over each element in the array
     if (func(element, key, arr)) {
-      truthy.push(element);
+      // If the predicate function returns true for the element
+      truthy.push(element); // Add the element to the truthy array
     } else {
-      falsey.push(element);
+      // If the predicate function returns false for the element
+      falsey.push(element); // Add the element to the falsey array
     }
   });
-  return [truthy, falsey];
+  return [truthy, falsey]; // Return an array containing the truthy and falsey arrays
 };
 
 /** _.map
@@ -358,7 +390,8 @@ _.map = function (collection, func) {
 
 _.pluck = function (arr, prop) {
   return _.map(arr, function (obj) {
-    return obj[prop];
+    // Use _.map to transform the array
+    return obj[prop]; // Return the value of the specified property from each object
   });
 };
 
@@ -385,27 +418,35 @@ _.pluck = function (arr, prop) {
 
 _.every = function (collection, func) {
   if (Array.isArray(collection)) {
+    // Check if the collection is an array
     if (func === undefined) {
+      // If no predicate function is provided
       for (let i = 0; i < collection.length; i++) {
+        // Iterate over each element in the array
         if (!collection[i]) {
-          return false;
+          // Check if the element is falsy
+          return false; // Return false if any element is falsy
         }
       }
     } else {
       for (let i = 0; i < collection.length; i++) {
-        if (!func(collection[i], i.collection)) {
-          return false;
+        // Iterate over each element in the array
+        if (!func(collection[i], i, collection)) {
+          // Apply the predicate function to each element
+          return false; // Return false if the predicate function returns false for any element
         }
       }
     }
   } else {
     for (let key in collection) {
+      // Iterate over each key in the object
       if (!func(collection[key], key, collection)) {
-        return false;
+        // Apply the predicate function to each value
+        return false; // Return false if the predicate function returns false for any value
       }
     }
   }
-  return true;
+  return true; // Return true if all elements pass the predicate function
 };
 
 /** _.some
@@ -430,14 +471,18 @@ _.every = function (collection, func) {
  */
 
 _.some = function (collection, func) {
+  // Is collection an array
   if (Array.isArray(collection)) {
+    // if not given a function
     if (func === undefined) {
+      // If the return value of calling <function> is true for at least one element, return true
       for (let i = 0; i < collection.length; i++) {
         if (collection[i]) {
           return true;
         }
       }
     } else {
+      // calls function for each element in the array and returns true if an element matches
       for (let i = 0; i < collection.length; i++) {
         if (func(collection[i], i, collection)) {
           return true;
@@ -445,12 +490,14 @@ _.some = function (collection, func) {
       }
     }
   } else {
+    // if collection is an object and a function is given
     for (let key in collection) {
       if (func(collection[key], key, collection)) {
         return true;
       }
     }
   }
+  // If it is false for all elements, return false
   return false;
 };
 
